@@ -1,0 +1,23 @@
+{
+  "name": "devtinder",
+  "version": "1.0.0",
+  "description": "tinder but for devs",
+  "keywords": [
+    "node.js",
+    "javascript",
+    "mongodb",
+    "backend"
+  ],
+  "license": "ISC",
+  "author": "Sahil Chiluka",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start" : "node src/app.js",
+    "dev" : "nodemon src/app.js"
+  },
+  "dependencies": {
+    "express": "^5.2.1"
+  }
+}
