@@ -1,31 +1,23 @@
-const express = require('express');
+const express = require("express");
 
 const app = express();
 
-app.use("/", (req, res) => {
-  res.send("Welcome to Home Page!");
+const { adminAuth, userAuth } = require("./middlewares/auth");
+
+app.use("/admin", adminAuth);
+
+app.get("/admin/getAllData", (req, res) => {
+  res.send("Send All Data");
 });
 
-// This will only handle GET call to /user
-app.get("/user", (req, res) => {
-  res.send({firstName: "Sahil", lastName: "Chiluka"});
+app.get("/admin/deleteAllData", (req, res) => {
+  res.send("Delete All Data");
 });
 
-app.post("/user", (req, res) => {
-  console.log("Saving User into Database");
-  res.send("User Saved Successfully");
-});
-
-app.delete("/user", (req, res) => {
-  res.send("Deleted User Successfully");
-});
-
-// If you do "app.use" This will match all the HTTP methods (GET, POST, DELETE, etc) to /test
-app.use("/test", (req, res) => {
-  res.send("You are on a test page.");
-});
+app.get("/user/getUserData", userAuth, (req, res) => {
+  res.send("Send User Data");
+})
 
 app.listen(7777, () => {
-  console.log('Server is listening on port 7777.');
+  console.log("Server is listening on port 7777.");
 });
-
