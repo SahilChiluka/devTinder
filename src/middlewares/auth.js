@@ -12,7 +12,7 @@ const adminAuth = (req, res, next) => {
 
 const userAuth = (req, res, next) => {
   console.log("User Auth Middleware");
-  const token = "xyzabc";
+  const token = "xyz";
   const isUserAuthorized = token === "xyz";
 
   if(!isUserAuthorized) {
