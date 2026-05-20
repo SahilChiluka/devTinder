@@ -7,9 +7,7 @@ const app = express();
 app.use(express.json()); // Middleware to parse JSON bodies
 
 app.post("/signup", async (req, res) => {
-
   const userData = req.body;
-
   const user = new User(userData);
 
   try {
@@ -59,11 +57,22 @@ app.delete("/deleteUser", async (req, res) => {
 });
 
 app.patch("/updateUser", async (req, res) => {
-  const userName = req.body.firstName;
+  const userId = req.body.userId;
   const updateData = req.body;
 
   try {
-    const updateUser = await User.findOneAndUpdate({firstName : userName} , updateData);
+    const allowedUpdates = ["firstName", "lastName", "photoUrl", "about", "skills", "age", "gender"];
+    const isUpdateAllowed = Object.keys(updateData).every((key) => allowedUpdates.includes(key));
+
+    if(!isUpdateAllowed) {
+      throw new Error("Invalid Updates! You can only update firstName, lastName, photos, about, skills, age and gender.");
+    }
+    if(updateData.skills && !Array.isArray(updateData.skills) && updateData.skills.length > 10) {
+      throw new Error("You can add maximum 10 skills!");
+    }
+    const updateUser = await User.findOneAndUpdate({ _id: userId }, updateData, {
+      runValidators: true, // to run the validators defined in the schema while updating
+    });
     res.send("User Updated Successfully!");
   } catch (error) {
     res.status(400).send("Something Went Wrong! " + error.message);
