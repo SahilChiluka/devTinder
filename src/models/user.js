@@ -18,21 +18,11 @@ const userSchema = new mongoose.Schema({
     required : true,
     unique : true,
     trim : true, // to remove the whitespace from the beginning and end of the string
-    lowercase : true,
-    validate(value) {
-      if(!validator.isEmail(value)) {
-        throw new Error("Invalid Email Address!");
-      }
-    }
+    lowercase : true
   },
   password : {
     type : String,
-    required : true,
-    validate(value) {
-      if(!validator.isStrongPassword(value)) {
-        throw new Error("Create a Strong Password.");
-      }
-    }
+    required : true
   },
   age : {
     type : Number,
