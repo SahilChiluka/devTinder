@@ -1,28 +1,31 @@
-const adminAuth = (req, res, next) => {
-  console.log("Admin Auth Middleware");
-  const token = "xyzabc";
-  const isAdminAuthorized = token === "xyz";
+const jwt = require("jsonwebtoken");
+const User = require("../models/user");
+require("dotenv").config();
 
-  if(!isAdminAuthorized) {
-    res.status(401).send("Unauthorized request");
-  } else {
+const secretKey = process.env.SECRETKEY;
+
+const userAuth = async (req, res, next) => {
+  try {
+    const { token } = req.cookies;
+    if (!token) {
+      throw new Error("Unauthorized! Please Login to access this resource.");
+    }
+
+    const decryptToken = await jwt.verify(token, secretKey);
+
+    const userId = decryptToken._id;
+    if (!userId) {
+      throw new Error("Unauthorized! Please Login to access this resource.");
+    }
+
+    const userProfile = await User.findById(userId);
+    req.user = userProfile;
     next();
+  } catch (error) {
+    res.status(401).send("Error: " + error.message);
   }
-}
-
-const userAuth = (req, res, next) => {
-  console.log("User Auth Middleware");
-  const token = "xyz";
-  const isUserAuthorized = token === "xyz";
-
-  if(!isUserAuthorized) {
-    res.status(401).send("Unauthorized request");
-  } else {
-    next();
-  }
-}
+};
 
 module.exports = {
-  adminAuth,
-  userAuth
-}
+  userAuth,
+};
