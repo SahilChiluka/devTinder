@@ -12,6 +12,31 @@ const validateSignUpData = (req) => {
   }
 };
 
+const validateEditProfileData = (req) => {
+  const allowedEditFields = ["firstName", "lastName", "age", "gender", "photoUrl", "about", "skills"];
+
+  const isEditAllowed = Object.keys(req.body).every((field) => allowedEditFields.includes(field));
+
+  return isEditAllowed;
+};
+
+const validateConnectionRequestData = (req) => {
+  const fromUserId = req.user._id;
+  const toUserId = req.params.userId;
+  const status = req.params.status;
+
+  const allowedStatus = ["interested", "ignored"];
+
+  // if(fromUserId == toUserId) {
+  //   throw new Error("Cannot sent the connection request to yourself");
+  // }
+  if(!allowedStatus.includes(status)) {
+    throw new Error("Invaild Status Type");
+  }
+}
+
 module.exports = {
   validateSignUpData,
+  validateEditProfileData,
+  validateConnectionRequestData
 };
