@@ -66,15 +66,6 @@ const userSchema = new mongoose.Schema(
 
 userSchema.index({ firstName: 1, lastName: 1 });
 
-userSchema.pre("save", async function (next) {
-  const user = this;
-
-  if (user.isModified("password")) {
-    user.password = await bcrypt.hash(user.password, 10);
-  }
-  next();
-});
-
 userSchema.methods.getJwt = async function () {
   const user = this;
   const secretKey = process.env.SECRETKEY;
